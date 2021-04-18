@@ -11,7 +11,8 @@ ecommerce-front/node_modules
 ecommerce-front/Product.json
 ecommerce-front/debug.log
 
-### STS ###
+### IDEA###
+ecomerce-back/.idea/
 ecomerce-back/.apt_generated
 ecomerce-back/.classpath
 ecomerce-back/.factorypath

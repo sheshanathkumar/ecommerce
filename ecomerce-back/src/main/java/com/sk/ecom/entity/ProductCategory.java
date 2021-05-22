@@ -25,7 +25,7 @@ public class ProductCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="pc_id")
+	@Column(name="id")
 	private Integer pcId;
 
 	@Column(name="category_name")

@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-10-10T17:14:38.169Z")
 //@CrossOrigin(value="*", maxAge = 3600)
 public class ProductController {
 	

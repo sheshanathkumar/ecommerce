@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 /**
@@ -29,13 +30,15 @@ public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
 	private Integer pid;
 
-	private Boolean active;
+	private int active;
 
 	@Column(name="date_created")
 	private Timestamp dateCreated;
 
+	@Column(name="description")
 	private String description;
 
 	@Column(name="image_url")

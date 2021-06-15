@@ -5,13 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,20 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
-@RequestMapping("/api")
 @Slf4j
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-10-10T17:14:38.169Z")
-//@CrossOrigin(value="*", maxAge = 3600)
 public class ProductController {
 	
 	@Autowired ProductRepo productRepo;
-	
 	@Autowired ProductCategoryRepo productCategoryRepo;
-	
-	@GetMapping("/test")
-	public String test() {
-		return "Hello";
-	}
 	
 	@GetMapping(value = "/product/{id}", produces = {"application/json" })
 	ResponseEntity<Product> getProductById (@PathVariable("id") Integer id){
@@ -83,6 +73,18 @@ public class ProductController {
 		} else {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping(value = "/product/book", produces = {"application/json" })
+	ResponseEntity<List<Product>> getProductByName(@RequestParam("name") String name) {
+		
+		List<Product> products = productRepo.findByNameContains(name.toUpperCase());
+		
+		if (!products.isEmpty()) {
+			return new ResponseEntity<> (products, HttpStatus.OK);
+		}
+		return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+		
 	}
 	
 }

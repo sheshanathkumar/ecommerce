@@ -3,13 +3,16 @@ import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Products } from '../model/products';
 import { map } from 'rxjs/operators'
+import { environment } from 'src/environments/environment';
+import { ApiConstants } from '../utills/ApiConstants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService{
 
-  private url = "http://localhost:9090/api/product/all";
+  private apiUrl: string = environment.api_url;
+  private allProduct :string = ApiConstants.getAllProducts;
   prods : Products[] = [];
 
   headers = new HttpHeaders( {
@@ -24,7 +27,7 @@ export class ProductService{
 
   getProduct() {
     console.log("Hello from product service");
-    return this.http.get <any> (this.url, this.options).pipe(
+    return this.http.get <any> ( this.apiUrl+this.allProduct  , this.options).pipe(
       map ( (res: HttpResponse<any>) => this.handleResponse(res))
     );
   }

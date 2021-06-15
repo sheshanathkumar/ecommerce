@@ -15,5 +15,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer>{
 	
 	@Query(value = "select * from product where category_id= ?", nativeQuery = true)
 	List<Product> findByCategoryId (int id);
+	
+	List<Product> findByNameContains (String name);
 
 }

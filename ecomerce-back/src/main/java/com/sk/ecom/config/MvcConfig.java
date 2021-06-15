@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UrlPathHelper;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer{
 
 	@Value("${spring.allowed.origin}")
@@ -17,12 +17,10 @@ public class MvcConfig implements WebMvcConfigurer{
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		System.out.println(allowedOrigin);
 		registry.addMapping("/**")
 			.allowedHeaders("*")
 			.allowedOrigins(allowedOrigin)
 			.allowedMethods("GET", "POST", "PUT")
-				.allowCredentials(true)
 			.maxAge(3600);
 	}
 
@@ -33,4 +31,21 @@ public class MvcConfig implements WebMvcConfigurer{
         urlPathHelper.setUrlDecode(false);
         configurer.setUrlPathHelper(urlPathHelper);
     }
+	
 }
+
+
+//@Configuration
+//@EnableWebMvc
+//@ComponentScan("com.sk.ecom.controller")
+//class ServletContextConfig extends WebMvcConfigurerAdapter {
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//	    registry.addResourceHandler("/*.*").addResourceLocations("../resources/static/");
+//	}
+//	
+//	@Override
+//	public void addViewControllers(ViewControllerRegistry registry) {
+//	    registry.addViewController("/").setViewName("../resources/static/index.html");
+//	}
+//}

@@ -13,6 +13,8 @@ export class ProductService{
 
   private apiUrl: string = environment.api_url;
   private allProduct :string = ApiConstants.getAllProducts;
+  private categoryProduct : string = ApiConstants.productByCategory;
+  private categories : string = ApiConstants.allCategories;
   prods : Products[] = [];
 
   headers = new HttpHeaders( {
@@ -26,10 +28,18 @@ export class ProductService{
   constructor(private http : HttpClient) { }
 
   getProduct() {
-    console.log("Hello from product service");
+    console.log("getting all product");
     return this.http.get <any> ( this.apiUrl+this.allProduct  , this.options).pipe(
       map ( (res: HttpResponse<any>) => this.handleResponse(res))
     );
+  }
+
+
+  getProductByCategories (category: string) {
+    console.log(`${this.apiUrl}${this.categoryProduct}?category=${category}`);
+    return this.http.get<any>(`${this.apiUrl}${this.categoryProduct}?category=${category}`, this.options).pipe(
+      map ( (res: HttpResponse<any>) => this.handleResponse(res))
+    )
   }
 
   handleResponse(res: HttpResponse<any>): any {

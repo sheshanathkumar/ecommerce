@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	
+	<Properties>
+		<Property name="logPath">C:/ecom-logs/</Property>
+		<Property name="logPattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss} {%t} %c{1}.%M-\{%line\} %m %n</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+		</Console>
+		<RollingFile name="App-Appender" fileName="${logPath}/ecom_${date:yyyy-MM-dd}.log" append="true" 
+					filePattern="${logPath}/ecom_%d{yyyy-MM-dd}_%i.log" >
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+			<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		
+		<RollingFile name="Error-Appender" fileName="${logPath}/ecom_error_${date:yyyy-MM-dd}.log" append="true" 
+					filePattern="${logPath}/ecom_error_%d{yyyy-MM-dd}_%i.log" >
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+			<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="Spring-Appeder" fileName="${logPath}/ecom_spring_${date:yyyy-MM-dd}.log" append="true" 
+					filePattern="${logPath}/ecom_error_%d{yyyy-MM-dd}_%i.log" >
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+			<ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+		</RollingFile>
+		
+	</Appenders>
+	
+	<Loggers>
+		<Logger name="com.sk.ecom" level="debug" additivity="false">
+			<AppenderRef ref="App-Appender" />
+			<AppenderRef ref="Error-Appender" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		
+		<Logger name="org.springframework" level="info" additivity="false">
+			<AppenderRef ref="Spring-Appeder" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		
+		<Root level="WARN">
+			<AppenderRef ref="Console" />
+		</Root>
+		
+	</Loggers>
+
+</Configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

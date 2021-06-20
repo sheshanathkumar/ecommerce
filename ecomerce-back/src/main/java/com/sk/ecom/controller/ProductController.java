@@ -2,10 +2,11 @@ package com.sk.ecom.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,20 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sk.ecom.entity.Product;
 import com.sk.ecom.entity.ProductCategory;
 import com.sk.ecom.model.ProductModel;
+import com.sk.ecom.model.ProductPageModel;
 import com.sk.ecom.repo.ProductCategoryRepo;
 import com.sk.ecom.repo.ProductRepo;
-
-import lombok.extern.slf4j.Slf4j;
+import com.sk.ecom.service.ProductService;
 
 
 
 @RestController
-@Slf4j
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-10-10T17:14:38.169Z")
 public class ProductController {
 	
+	private static Logger log = LogManager.getLogger(ProductController.class);
+	
 	@Autowired ProductRepo productRepo;
 	@Autowired ProductCategoryRepo productCategoryRepo;
+	@Autowired ProductService productService;
 	
 	@GetMapping(value = "/product/{id}", produces = {"application/json" })
 	ResponseEntity<Product> getProductById (@PathVariable("id") Integer id){
@@ -40,19 +43,23 @@ public class ProductController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 	}
 	
 	@GetMapping(value = "/product/all", produces = {"application/json" })
-	ResponseEntity<List<Product>> getAllProduct () {
+	ResponseEntity<ProductPageModel> getAllProduct () {
+		log.info("START: ProductController.getProduct");
 		
-		List<Product> prodList = productRepo.findAll();
-		if (! prodList.isEmpty()) {
-			return new ResponseEntity<> (prodList, HttpStatus.OK);
+		
+		
+		ProductPageModel productPageModel = productService.getAllProduct();
+		
+		
+		if (! productPageModel.getProducts().isEmpty()) {
+			log.info("END: ProductController.getProduct");
+			return new ResponseEntity<> (productPageModel, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}
-		
 	}
 	
 	@PostMapping(value = "/product/add", produces = {"application/json" }, consumes = {"application/json" })
@@ -64,9 +71,8 @@ public class ProductController {
 	
 	@GetMapping(value = "/product/category", produces = {"application/json" })
 	ResponseEntity<List<Product>> getProductByCategory (@RequestParam("category") String category){
-	//	log.info("START: ProductController.getProductByCategory, category={}", category);
-		
-		ProductCategory pc = productCategoryRepo.findByCategoryName(category);
+		log.info("START: ProductController.getProductByCategory, category={}", category);
+		ProductCategory pc = productCategoryRepo.findByCategoryNameContaining(category);
 		List<Product> prodList = pc.getProducts();
 		if (!prodList.isEmpty()) {
 			return new ResponseEntity<> (prodList, HttpStatus.OK);
@@ -74,6 +80,7 @@ public class ProductController {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}
 	}
+	
 	
 	@GetMapping(value = "/product/book", produces = {"application/json" })
 	ResponseEntity<List<Product>> getProductByName(@RequestParam("name") String name) {
@@ -84,6 +91,18 @@ public class ProductController {
 			return new ResponseEntity<> (products, HttpStatus.OK);
 		}
 		return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+	}
+	
+	
+	@GetMapping(value = "/categories", produces = {"application/json" })
+	ResponseEntity<List<String>> getAllCategories () {
+		
+		List<String> allCategory = productCategoryRepo.getAllCategory();
+		if (! allCategory.isEmpty()) {
+			return new ResponseEntity<>(allCategory, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+		}
 		
 	}
 	

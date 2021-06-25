@@ -10,6 +10,8 @@ import { ProductService } from 'src/app/service/product.service';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
+
+  searchValue :String = "";
   prod1 : Products = {
     name: "JavaScript - The Fun Parts",
     price : 12.90,
@@ -51,6 +53,19 @@ export class ProductListComponent implements OnInit {
         });
       }
     );
+  }
+
+
+  findProduct (search : string) {
+    console.log(search);
+    this.products = [];
+    this.prodService.findProduct(search).subscribe(
+      (data) => {
+        data.forEach(element => {
+          this.products.push(element);
+        });
+      }
+    )
   }
 
 

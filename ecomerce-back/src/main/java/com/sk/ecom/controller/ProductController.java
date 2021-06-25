@@ -2,6 +2,7 @@ package com.sk.ecom.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sk.ecom.entity.Product;
 import com.sk.ecom.entity.ProductCategory;
+import com.sk.ecom.exception.SearchProductException;
 import com.sk.ecom.model.ProductModel;
 import com.sk.ecom.model.ProductPageModel;
 import com.sk.ecom.repo.ProductCategoryRepo;
@@ -48,11 +50,7 @@ public class ProductController {
 	@GetMapping(value = "/product/all", produces = {"application/json" })
 	ResponseEntity<ProductPageModel> getAllProduct () {
 		log.info("START: ProductController.getProduct");
-		
-		
-		
 		ProductPageModel productPageModel = productService.getAllProduct();
-		
 		
 		if (! productPageModel.getProducts().isEmpty()) {
 			log.info("END: ProductController.getProduct");
@@ -86,7 +84,6 @@ public class ProductController {
 	ResponseEntity<List<Product>> getProductByName(@RequestParam("name") String name) {
 		
 		List<Product> products = productRepo.findByNameContains(name.toUpperCase());
-		
 		if (!products.isEmpty()) {
 			return new ResponseEntity<> (products, HttpStatus.OK);
 		}
@@ -103,7 +100,23 @@ public class ProductController {
 		} else {
 			return new ResponseEntity<> (HttpStatus.NOT_FOUND);
 		}
-		
 	}
+	
+	@GetMapping(value = "/product/find", produces = {"application/json" })
+	ResponseEntity<List<Product>>  findProduct (@RequestParam("search")  String value) {
+		
+		if (! StringUtils.isBlank(value.trim()) && value.trim().length() > 2) {
+			value = "%"+value+"%";
+			List<Product> products = productRepo.findProduct (value.trim(), value.trim());
+			if (! products.isEmpty()) {
+				return new ResponseEntity<> (products, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<> (HttpStatus.NOT_FOUND);
+			}
+		} else {
+			throw new SearchProductException("Search value is null or less than 2");
+		}
+	}
+	
 	
 }

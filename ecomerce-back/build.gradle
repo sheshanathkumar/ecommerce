@@ -33,6 +33,7 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	// https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
 	implementation 'io.swagger.core.v3:swagger-annotations:2.1.2'
+	implementation 'org.apache.commons:commons-lang3:3.9'
 	
 }
 

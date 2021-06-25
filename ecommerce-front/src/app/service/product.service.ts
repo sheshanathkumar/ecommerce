@@ -15,6 +15,7 @@ export class ProductService{
   private allProduct :string = ApiConstants.getAllProducts;
   private categoryProduct : string = ApiConstants.productByCategory;
   private categories : string = ApiConstants.allCategories;
+  private searchProduct : string = ApiConstants.findProduct;
   prods : Products[] = [];
 
   headers = new HttpHeaders( {
@@ -42,8 +43,15 @@ export class ProductService{
     )
   }
 
+  findProduct (search : string) {
+    console.log (`${this.apiUrl}{this.searchProduct}??search=${search}`);
+    return this.http.get<any>(`${this.apiUrl}${this.searchProduct}?search=${search}`, this.options).pipe(
+      map( (res: HttpResponse<any>) => this.handleResponse(res))
+    )
+  }
+
   handleResponse(res: HttpResponse<any>): any {
-    //console.log(res.status, res);
+    console.log(res.status, res);
     return res;
   }
 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Products } from 'src/app/model/products';
 import { ProductService } from 'src/app/service/product.service';
+import { ApiConstants } from 'src/app/utills/ApiConstants';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +23,7 @@ export class ProductListComponent implements OnInit {
   products : Products[] = [];
   categories : string[] = [];
   
-  constructor(private prodService : ProductService, private route: ActivatedRoute) { }
+  constructor(private prodService : ProductService, private route: Router) { }
 
   ngOnInit(): void {
 
@@ -66,6 +67,12 @@ export class ProductListComponent implements OnInit {
         });
       }
     )
+  }
+
+  productDetail(pid: number) {
+    console.log(pid);
+    ApiConstants.productId = pid;
+    this.route.navigate([`product/single`]);
   }
 
 

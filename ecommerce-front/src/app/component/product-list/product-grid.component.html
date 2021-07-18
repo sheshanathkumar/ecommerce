@@ -53,7 +53,7 @@
 
                 <div *ngFor="let p of products">
 
-                    <div class="parent-product-box">
+                    <div class="parent-product-box" (click)="productDetail(p.pid)">
                     <div class="product-box">
                         <img src="{{p.imageUrl}}" width="30px" height="30px" class="img-responsive" />
                         <h1>{{p.name}}</h1>
